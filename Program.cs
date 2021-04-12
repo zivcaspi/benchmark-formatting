@@ -1,10 +1,14 @@
 ﻿using System;
 
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
 
 [MemoryDiagnoser]
+[SimpleJob(RuntimeMoniker.Net472, baseline: true)]
+[SimpleJob(RuntimeMoniker.Net48)]
+[SimpleJob(RuntimeMoniker.NetCoreApp50)]
 public class FormattableStringBenchmark
 {
     private bool m_never = Guid.NewGuid().ToString().Equals("bla");
@@ -20,7 +24,7 @@ public class FormattableStringBenchmark
         BenchmarkRunner.Run(typeof(FormattableStringBenchmark), config);
     }
 
-    [Benchmark]
+    [Benchmark(Baseline = true)]
     public string False_Simple()
     {
         return InvokeSimple(m_never, "{0}/{1}/{2}/{3}", m_i1, m_i2, m_i3, m_i4);
